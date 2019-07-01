@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,11 +14,14 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="default")
      */
-    public function index() {
-        $message = 'I\'m index method';
+    public function index (ProductRepository $productRepository) {
+        $products = $productRepository->findAll(
+        ['isTop' => true],
+        ['name' => 'ASC']
+        ) ;
         return $this->render('default/index.html.twig' ,
         [
-            'mess' => $message,
+            'products' => $products,
         ]);
     }
 }
